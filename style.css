@@ -1,16 +1,3 @@
-:root {
-    --primary-color: #2196F3;
-    --success-color: #4CAF50;
-    --warning-color: #FFC107;
-    --danger-color: #DC3545;
-    --info-color: #00BCD4;
-    --text-color: #333;
-    --background-color: #f5f5f5;
-    --card-background: #ffffff;
-    --border-radius: 8px;
-    --shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
 * {
     margin: 0;
     padding: 0;
@@ -18,40 +5,27 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: var(--background-color);
-    color: var(--text-color);
-    line-height: 1.6;
-}
-
-.dashboard {
-    max-width: 1200px;
-    margin: 0 auto;
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
     padding: 20px;
 }
 
-/* Header Styles */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
 header {
     text-align: center;
     margin-bottom: 30px;
 }
 
-header h1 {
-    color: var(--primary-color);
+h1 {
+    color: #1a73e8;
     margin-bottom: 10px;
 }
 
-header i {
-    margin-right: 10px;
-}
-
-#last-updated {
-    color: #666;
-    font-size: 0.9rem;
-}
-
-/* Statistics Cards */
-.stats-container {
+.stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
@@ -59,222 +33,50 @@ header i {
 }
 
 .stat-card {
-    background: var(--card-background);
+    background: white;
     padding: 20px;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow);
-    transition: transform 0.3s ease;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    text-align: center;
 }
 
-.stat-card:hover {
-    transform: translateY(-5px);
-}
-
-.stat-card h3 {
-    color: #666;
-    font-size: 1rem;
-    margin-bottom: 10px;
-}
-
-.stat-value {
-    font-size: 2.5rem;
+.count {
+    font-size: 48px;
     font-weight: bold;
-    margin: 10px 0;
+    color: #1a73e8;
+    margin: 15px 0;
 }
 
-.stat-period {
-    font-size: 0.9rem;
-    color: #666;
-}
-
-/* Card Colors */
-.stat-card.primary .stat-value { color: var(--primary-color); }
-.stat-card.success .stat-value { color: var(--success-color); }
-.stat-card.warning .stat-value { color: var(--warning-color); }
-.stat-card.info .stat-value { color: var(--info-color); }
-
-/* Control Panel */
-.control-panel {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 20px;
-    justify-content: flex-end;
-}
-
-.control-btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
-}
-
-.control-btn i {
-    font-size: 1.1rem;
-}
-
-.control-btn.primary {
-    background-color: var(--primary-color);
-    color: white;
-}
-
-.control-btn.warning {
-    background-color: var(--warning-color);
-    color: #000;
-}
-
-.control-btn.danger {
-    background-color: var(--danger-color);
-    color: white;
-}
-
-.control-btn:hover {
-    transform: translateY(-2px);
-    opacity: 0.9;
-}
-
-/* Table Styles */
-.table-container {
-    background: var(--card-background);
+.recent-list {
+    background: white;
     padding: 20px;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow);
-}
-
-.table-container h2 {
-    margin-bottom: 20px;
-}
-
-.table-wrapper {
-    overflow-x: auto;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
+    margin-top: 15px;
 }
 
 th, td {
     padding: 12px;
     text-align: left;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #ddd;
 }
 
 th {
     background-color: #f8f9fa;
-    font-weight: 600;
+    font-weight: 500;
 }
 
-tbody tr:hover {
+tr:hover {
     background-color: #f8f9fa;
 }
 
-/* Action Buttons in Table */
-.action-btn {
-    padding: 5px 10px;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: all 0.2s ease;
-}
-
-.action-btn.delete {
-    background-color: #ffebee;
-    color: var(--danger-color);
-}
-
-.action-btn.delete:hover {
-    background-color: var(--danger-color);
-    color: white;
-}
-
-/* Modal Styles */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-}
-
-.modal-content {
-    position: relative;
-    background-color: white;
-    margin: 15% auto;
-    padding: 20px;
-    border-radius: 5px;
-    width: 90%;
-    max-width: 500px;
-    text-align: center;
-}
-
-.modal-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 20px;
-}
-
-/* Status Message */
-.status-message {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    padding: 15px 25px;
-    border-radius: var(--border-radius);
-    color: white;
-    opacity: 0;
-    transform: translateY(100%);
-    transition: all 0.3s ease;
-    z-index: 1000;
-}
-
-.status-message.show {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.status-message.success {
-    background-color: var(--success-color);
-}
-
-.status-message.error {
-    background-color: var(--danger-color);
-}
-
-/* Responsive Design */
 @media (max-width: 768px) {
-    .dashboard {
-        padding: 10px;
-    }
-
-    .stats-container {
+    .stats-grid {
         grid-template-columns: 1fr;
-    }
-
-    .stat-value {
-        font-size: 2rem;
-    }
-
-    .control-panel {
-        flex-direction: column;
-    }
-
-    .control-btn {
-        width: 100%;
-        justify-content: center;
-    }
-
-    th, td {
-        padding: 8px;
-        font-size: 0.9rem;
     }
 }

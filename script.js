@@ -1,4 +1,4 @@
-class JobApplicationTracker {
+class JobCounter {
     constructor() {
         this.applications = [];
         this.initializeElements();
@@ -7,96 +7,101 @@ class JobApplicationTracker {
 
     initializeElements() {
         this.elements = {
-            totalApplications: document.getElementById('total-applications'),
-            weeklyApplications: document.getElementById('weekly-applications'),
-            monthlyApplications: document.getElementById('monthly-applications'),
-            dailyAverage: document.getElementById('daily-average'),
+            totalCount: document.getElementById('total-count'),
+            weekCount: document.getElementById('week-count'),
+            monthCount: document.getElementById('month-count'),
             dateRange: document.getElementById('date-range'),
-            lastUpdated: document.getElementById('last-updated'),
-            applicationsList: document.getElementById('applications-list'),
-            deleteLastBtn: document.getElementById('delete-last'),
-            clearAllBtn: document.getElementById('clear-all'),
-            refreshBtn: document.getElementById('refresh-data'),
-            confirmModal: document.getElementById('confirm-modal'),
-            confirmYes: document.getElementById('confirm-yes'),
-            confirmNo: document.getElementById('confirm-no')
+            applicationsList: document.getElementById('applications-list')
         };
-
-        // Add event listeners
-        this.elements.deleteLastBtn.addEventListener('click', () => this.confirmDelete('last'));
-        this.elements.clearAllBtn.addEventListener('click', () => this.confirmDelete('all'));
-        this.elements.refreshBtn.addEventListener('click', () => this.loadData());
-        this.elements.confirmYes.addEventListener('click', () => this.executeDelete());
-        this.elements.confirmNo.addEventListener('click', () => this.closeModal());
     }
 
     async loadData() {
         try {
-            console.log('Loading data...');
             const response = await fetch('applications.txt');
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                throw new Error('Failed to load data');
             }
             const text = await response.text();
-            this.applications = this.parseTextFile(text);
-            this.updateDashboard();
-            this.showStatus('Data loaded successfully', 'success');
+            console.log('Raw file content:', text); // Debug log
+            this.processData(text);
         } catch (error) {
-            console.error('Error loading data:', error);
-            this.showStatus('Failed to load data: ' + error.message, 'error');
+            console.error('Error:', error);
         }
     }
 
-    parseTextFile(text) {
-        try {
-            const lines = text.split('\n').filter(line => line.trim());
-            const headers = lines[0].toLowerCase().trim();
+    processData(text) {
+        // Split into lines and clean thoroughly
+        const lines = text
+            .split('\n')
+            .map(line => line.trim()) // Remove whitespace
+            .filter(line => line && line !== 'date,company,position'); // Remove empty lines and header
 
-            if (!headers.includes('date') || !headers.includes('company') || !headers.includes('position')) {
-                throw new Error('Invalid file format');
-            }
+        console.log('Cleaned lines:', lines); // Debug log
 
-            return lines
-                .slice(1)
-                .filter(line => line.trim())
-                .map(line => {
-                    const [date, company, position] = line.split(',').map(item => item.trim());
-                    return {
-                        date: new Date(date),
-                        company,
-                        position,
-                        daysAgo: this.calculateDaysAgo(new Date(date))
-                    };
-                })
-                .sort((a, b) => b.date - a.date);
-        } catch (error) {
-            throw new Error('Failed to parse file: ' + error.message);
-        }
+        // Create unique entries to avoid duplicates
+        const uniqueEntries = new Set(lines);
+        console.log('Unique entries:', uniqueEntries); // Debug log
+
+        // Parse applications
+        this.applications = Array.from(uniqueEntries).map(line => {
+            const [date, company, position] = line.split(',').map(item => item.trim());
+            return {
+                date: new Date(date),
+                company,
+                position
+            };
+        });
+
+        console.log('Processed applications:', this.applications); // Debug log
+        this.updateDisplay();
     }
 
-    updateDashboard() {
-        if (this.applications.length === 0) {
-            this.resetStats();
-            return;
-        }
+    updateDisplay() {
+        // Update total count
+        this.elements.totalCount.textContent = this.applications.length;
 
-        // Update statistics
+        // Calculate dates
         const now = new Date();
         const oneWeekAgo = new Date(now - 7 * 24 * 60 * 60 * 1000);
         const oneMonthAgo = new Date(now - 30 * 24 * 60 * 60 * 1000);
 
+        // Count recent applications
         const weeklyCount = this.applications.filter(app => app.date >= oneWeekAgo).length;
         const monthlyCount = this.applications.filter(app => app.date >= oneMonthAgo).length;
-        
-        const totalDays = Math.ceil((this.applications[0].date - this.applications[this.applications.length - 1].date) / (1000 * 60 * 60 * 24)) + 1;
-        const average = (this.applications.length / totalDays).toFixed(1);
 
-        // Update UI elements
-        this.elements.totalApplications.textContent = this.applications.length;
-        this.elements.weeklyApplications.textContent = weeklyCount;
-        this.elements.monthlyApplications.textContent = monthlyCount;
-        this.elements.dailyAverage.textContent = average;
+        // Update counts
+        this.elements.weekCount.textContent = weeklyCount;
+        this.elements.monthCount.textContent = monthlyCount;
 
-        const firstDate = this.formatDate(this.applications[this.applications.length - 1].date);
-        const lastDate = this.formatDate(this.applications[0].date);
-        this.elements.dateRange.textContent = `${firstDate} - ${last
+        // Update date range
+        if (this.applications.length > 0) {
+            const firstDate = this.formatDate(this.applications[0].date);
+            const lastDate = this.formatDate(this.applications[this.applications.length - 1].date);
+            this.elements.dateRange.textContent = `${firstDate} to ${lastDate}`;
+        }
+
+        // Update applications list
+        this.elements.applicationsList.innerHTML = this.applications
+            .map(app => `
+                <tr>
+                    <td>${this.formatDate(app.date)}</td>
+                    <td>${app.company}</td>
+                    <td>${app.position}</td>
+                </tr>
+            `)
+            .join('');
+    }
+
+    formatDate(date) {
+        return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+        });
+    }
+}
+
+// Initialize when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    new JobCounter();
+});

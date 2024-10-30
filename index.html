@@ -3,92 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Job Application Tracker</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Job Application Counter</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="dashboard">
+    <div class="container">
         <header>
-            <h1><i class="fas fa-briefcase"></i> Job Application Tracker</h1>
-            <p id="last-updated"></p>
+            <h1>Job Application Counter</h1>
         </header>
 
-        <!-- Statistics Cards -->
-        <div class="stats-container">
-            <div class="stat-card primary">
-                <h3>Total Applications</h3>
-                <div class="stat-value" id="total-applications">0</div>
-                <div class="stat-period" id="date-range">No applications yet</div>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h2>Total Applications</h2>
+                <div class="count" id="total-count">0</div>
+                <p id="date-range"></p>
             </div>
 
-            <div class="stat-card success">
-                <h3>Last 7 Days</h3>
-                <div class="stat-value" id="weekly-applications">0</div>
-                <div class="stat-period">Applications this week</div>
+            <div class="stat-card">
+                <h2>Last 7 Days</h2>
+                <div class="count" id="week-count">0</div>
+                <p>Applications this week</p>
             </div>
 
-            <div class="stat-card info">
-                <h3>Last 30 Days</h3>
-                <div class="stat-value" id="monthly-applications">0</div>
-                <div class="stat-period">Applications this month</div>
-            </div>
-
-            <div class="stat-card warning">
-                <h3>Daily Average</h3>
-                <div class="stat-value" id="daily-average">0</div>
-                <div class="stat-period">Applications per day</div>
+            <div class="stat-card">
+                <h2>Last 30 Days</h2>
+                <div class="count" id="month-count">0</div>
+                <p>Applications this month</p>
             </div>
         </div>
 
-        <!-- Control Buttons -->
-        <div class="control-panel">
-            <button id="delete-last" class="control-btn warning">
-                <i class="fas fa-minus-circle"></i> Delete Last Entry
-            </button>
-            <button id="clear-all" class="control-btn danger">
-                <i class="fas fa-trash-alt"></i> Clear All Data
-            </button>
-            <button id="refresh-data" class="control-btn primary">
-                <i class="fas fa-sync-alt"></i> Refresh Data
-            </button>
-        </div>
-
-        <!-- Applications Table -->
-        <div class="table-container">
+        <div class="recent-list">
             <h2>Recent Applications</h2>
-            <div class="table-wrapper">
-                <table id="applications-table">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Company</th>
-                            <th>Position</th>
-                            <th>Days Ago</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="applications-list"></tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Status Message -->
-        <div id="status-message" class="status-message"></div>
-
-        <!-- Confirmation Modal -->
-        <div id="confirm-modal" class="modal">
-            <div class="modal-content">
-                <h2>Confirm Action</h2>
-                <p id="modal-message"></p>
-                <div class="modal-buttons">
-                    <button id="confirm-yes" class="control-btn danger">Yes, proceed</button>
-                    <button id="confirm-no" class="control-btn">Cancel</button>
-                </div>
-            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Company</th>
+                        <th>Position</th>
+                    </tr>
+                </thead>
+                <tbody id="applications-list">
+                    <!-- Data will be inserted here -->
+                </tbody>
+            </table>
         </div>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
